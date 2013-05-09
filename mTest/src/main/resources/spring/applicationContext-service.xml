@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxActive" value="${redis.pool.maxActive}" />
+		<property name="maxIdle" value="${redis.pool.maxIdle}" />
+		<property name="maxWait" value="${redis.pool.maxWait}" />
+		<property name="testOnBorrow" value="${redis.pool.testOnBorrow}" />
+		<property name="testOnReturn" value="${redis.pool.testOnReturn}" />
+	</bean>
+	<bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+		<constructor-arg index="0" ref="jedisPoolConfig" />
+		<constructor-arg index="1" value="${redis.ip}" />
+		<constructor-arg index="2" value="${redis.port}" type="int" />
+	</bean>
+<!-- 
+	<bean id="writePool" class="redis.clients.jedis.JedisPool">
+		<constructor-arg index="0" ref="jedisPoolConfig" />
+		<constructor-arg index="1" value="${redis.ip}" />
+		<constructor-arg index="2" value="${redis.port}" type="int" />
+	</bean>
+	<bean id="readPool" class="redis.clients.jedis.JedisPool">
+		<constructor-arg index="0" ref="jedisPoolConfig" />
+		<constructor-arg index="1" value="${redis2.ip}" />
+		<constructor-arg index="2" value="${redis2.port}" type="int" />
+	</bean>
+ -->
+	<bean id="shardedJedisPool" class="redis.clients.jedis.ShardedJedisPool">
+		<constructor-arg index="0" ref="jedisPoolConfig" />
+		<constructor-arg index="1">
+			<list>
+				<bean class="redis.clients.jedis.JedisShardInfo">
+					<constructor-arg index="0" value="${redis.ip}" />
+					<constructor-arg index="1" value="${redis.port}" type="int" />
+				</bean>
+				<!--
+					<bean class="redis.clients.jedis.JedisShardInfo"> <constructor-arg
+					index="0" value="${redis2.ip}" /> <constructor-arg index="1"
+					value="${redis.port}" type="int" /> </bean>
+				-->
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="redisCache" class="com.redis_server.util.RedisCacheManager">
+		<property name="readPool">
+			<list>
+				<ref bean="jedisPool" />
+			</list>
+		</property>
+		<property name="writePool">
+			<list>
+				<ref bean="jedisPool" />
+			</list>
+		</property>
+		<!-- 
+		<property name="pool" ref="jedisPool"></property>
+		 -->
+		<property name="shardedJedisPool" ref="shardedJedisPool"></property>
+		<property name="keyPerfix" value="${redis.key}"></property>
+		<property name="refreshPeriod" value="${redis.expire}"></property>
+	</bean>
+	<bean id="userInfService" class="com.redis_server.service.impl.UserInfServiceImpl">
+		<property name="userInfDao" ref="userInfDAO"></property>
+		<property name="redisCache" ref="redisCache"></property>
+	</bean>
+
+</beans>
