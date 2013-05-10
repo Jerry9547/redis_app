@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="redis_server"
+  id="myeclipse.1362365766418"
+  context-root="/redis_server"
+  j2ee-spec="5.0"
+  archive="redis_server.war">
+  <attributes>
+    <attribute name="webrootdir" value="/src/main/webapp" />
+  </attributes>
+</project-module>
+

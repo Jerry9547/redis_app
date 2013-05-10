@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+
+<!-- ======================================================================= -->
+<!-- groupzone bulid by wing 2008.10.23                                      -->
+<!-- ======================================================================= -->
+
+<project name="redis-server" basedir=".">
+
+	<property environment="env" />
+
+	<property name="web.home" value="./src/main/webapp" />
+	<property name="lib.home" value="${web.home}/WEB-INF/lib" />
+	<property name="build.home" value="${web.home}/WEB-INF/classes" />
+	<property name="src.home" value="./src" />
+	<property name="dist.home" value="./target" />
+	<property name="resources.home" value="./resources" />
+
+	<property name="compile.debug" value="true" />
+	<property name="compile.deprecation" value="true" />
+	<property name="compile.optimize" value="false" />
+	<path id="compile.classpath">
+		<pathelement location="${build.home}"/>
+		<fileset dir="${lib.home}" >
+			<include name="*.jar" />
+		</fileset>
+	</path>
+	<target name="create_jar" depends="">
+		<jar destfile="${dist.home}/${ant.project.name}.jar" basedir="${build.home}" includes="com/**" />
+	</target>
+
+
+	<target name="native2ascii">
+		<echo message="1. Start Encoding UTF-8" />
+		<delete dir="${web.home}/WEB-INF/classes/" excludes="com/**">
+		</delete>
+
+
+		<echo message="2. Delete old resources" />
+		<echo message="3. Rebulid resources" />
+		<copy todir="${web.home}/WEB-INF/classes/">
+			<fileset dir="${src.home}/main/resources" />
+		</copy>
+		<delete dir="${web.home}/WEB-INF/classes/resources" />
+		<!--
+		<native2ascii encoding="UTF-8" dest="${web.home}/WEB-INF/classes/resources" src="${src.home}/main/resources/resources" />
+		
+		-->
+			
+				
+		<echo message="4. End Encoding" />
+	</target>
+	
+	
+</project>
+

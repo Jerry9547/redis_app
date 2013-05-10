@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<package name="mTest.user" extends="struts-default" namespace="/user">
+	
+		<action name="getUser" class="com.redis_server.web.action.UserInfAction" method="getUserInf"></action>
+		<action name="getUID" class="com.redis_server.web.action.UserInfAction" method="getUserId"></action>
+		<action name="getUserList" class="com.redis_server.web.action.UserInfAction" method="getUserList"></action>
+		<action name="getUserListSD" class="com.redis_server.web.action.UserInfAction" method="getUserListSharded"></action>
+		
+	</package>
+</struts>    
